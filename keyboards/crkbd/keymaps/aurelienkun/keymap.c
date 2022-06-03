@@ -18,56 +18,126 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 #include <stdio.h>
+#include <keymap_french.h>
+#include <keymap_bepo.h>
+
+#define SPC_LALT LALT_T(KC_SPC)       // Tap: space   Hold: alt
+#define TAB_LSFT SFT_T(KC_TAB)        // Tap: tab     Hold: shift
+#define ENT_NAV LT(_NAVI, KC_ENT)   // Tap: enter   Hold: layer navigation
+
+enum custom_layers {
+    _AZERTY,
+    _NUMBERS,
+    _NAVI,
+};
+
+enum combos { 
+  R_T_LPRN,
+  Y_U_RPRN,
+  F_G_LCBR,
+  H_J_RCBR,
+  V_B_LBRC,
+  N_COMM_RBRC,
+  Y_N_PIPE,
+  T_B_PIPE,
+  B_N_MINS,
+  W_EXLM_UNDS,
+  E_U_EURO,
+  E_T_AMPR,
+  T_F_B_LABK,
+  Y_J_N_RABK,
+  U_S_DLR,
+  T_L_TILD,
+  A_T_AT,
+  E_COMM_EACU,
+  E_SCLN_EGRV,
+  A_SCLN_AGRV,
+  U_SCLN_UGRV,
+};
+
+const uint16_t PROGMEM r_t_lprn[] = { FR_R, FR_T, COMBO_END};
+const uint16_t PROGMEM y_u_rprn[] = { FR_Y, FR_U, COMBO_END};
+const uint16_t PROGMEM f_g_lcbr[] = { FR_F, FR_G, COMBO_END};
+const uint16_t PROGMEM h_j_rcbr[] = { FR_H, FR_J, COMBO_END};
+const uint16_t PROGMEM v_b_lbrc[] = { FR_V, FR_B, COMBO_END};
+const uint16_t PROGMEM n_comm_rbrc[] = { FR_N, FR_COMM, COMBO_END};
+const uint16_t PROGMEM y_n_pipe[] = { FR_Y, FR_N, COMBO_END};
+const uint16_t PROGMEM t_b_pipe[] = { FR_T, FR_B, COMBO_END};
+const uint16_t PROGMEM b_n_mins[] = { FR_B, FR_N, COMBO_END};
+const uint16_t PROGMEM w_exlm_unds[] = { FR_W, FR_EXLM, COMBO_END};
+const uint16_t PROGMEM e_u_euro[] = { FR_E, FR_U, COMBO_END};
+const uint16_t PROGMEM e_t_ampr[] = { FR_E, FR_T, COMBO_END};
+const uint16_t PROGMEM t_f_b_labk[] = { FR_T, FR_F, FR_B, COMBO_END};
+const uint16_t PROGMEM y_j_n_rabk[] = { FR_Y, FR_J, FR_N, COMBO_END};
+const uint16_t PROGMEM u_s_dlr[] = { FR_U, FR_S, COMBO_END};
+const uint16_t PROGMEM t_l_tild[] = { FR_E, FR_T, COMBO_END};
+const uint16_t PROGMEM a_t_at[] = { FR_A, FR_T, COMBO_END};
+const uint16_t PROGMEM e_comm_eacu[] = { FR_E, FR_COMM, COMBO_END};
+const uint16_t PROGMEM e_scln_egrv[] = { FR_E, FR_SCLN, COMBO_END};
+const uint16_t PROGMEM u_scln_ugrv[] = { FR_U, FR_SCLN, COMBO_END};
+const uint16_t PROGMEM a_scln_agrv[] = { FR_A, FR_SCLN, COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+    [R_T_LPRN]    = COMBO(r_t_lprn, FR_LPRN),    // (
+    [Y_U_RPRN]    = COMBO(y_u_rprn, FR_RPRN),    // )
+    [F_G_LCBR]    = COMBO(f_g_lcbr, FR_LCBR),    // {
+    [H_J_RCBR]    = COMBO(h_j_rcbr, FR_RCBR),    // }
+    [V_B_LBRC]    = COMBO(v_b_lbrc, FR_LBRC),    // [
+    [N_COMM_RBRC] = COMBO(n_comm_rbrc, FR_RBRC), // ]
+    [Y_N_PIPE]    = COMBO(y_n_pipe, FR_PIPE),    // |
+    [T_B_PIPE]    = COMBO(t_b_pipe, FR_PIPE),    // |
+    [B_N_MINS]    = COMBO(b_n_mins, FR_MINS),    // -
+    [W_EXLM_UNDS] = COMBO(w_exlm_unds, FR_UNDS), // _
+    [E_T_AMPR]    = COMBO(e_t_ampr, FR_AMPR),    // &
+    [T_F_B_LABK]  = COMBO(t_f_b_labk, FR_LABK),  // <
+    [Y_J_N_RABK]  = COMBO(y_j_n_rabk, FR_RABK),  // >
+    [E_U_EURO]    = COMBO(e_u_euro, FR_EURO),    // €
+    [U_S_DLR]     = COMBO(u_s_dlr, FR_DLR),      // $
+    [T_L_TILD]    = COMBO(t_l_tild, FR_TILD),    // ~
+    [A_T_AT]      = COMBO(a_t_at, FR_AT),        // @
+    [E_COMM_EACU] = COMBO(e_comm_eacu, FR_EACU), // é
+    [E_SCLN_EGRV] = COMBO(e_scln_egrv, FR_EGRV), // è
+    [A_SCLN_AGRV] = COMBO(a_scln_agrv, FR_AGRV), // à
+    [U_SCLN_UGRV] = COMBO(u_scln_ugrv, FR_UGRV), // ù
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT_split_3x6_3(
+  [_AZERTY] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
+       KC_ESC,    FR_A,    FR_Z,    FR_E,    FR_R,    FR_T,                         FR_Y,    FR_U,    FR_I,    FR_O,   FR_P,  KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
+     TAB_LSFT,    FR_Q,    FR_S,    FR_D,    FR_F,    FR_G,                         FR_H,    FR_J,    FR_K,    FR_L,   FR_M,  FR_CIRC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ESC,
+      KC_LCTL,    FR_W,    FR_X,    FR_C,    FR_V,    FR_B,                         FR_N, FR_COMM, FR_SCLN, FR_COLN, FR_EXLM, FR_QUOT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   MO(1),  KC_SPC,     KC_ENT,   MO(2), KC_RALT
+                                          KC_LGUI,   TT(1),  KC_SPC,    ENT_NAV, TO(1), KC_RALT
                                       //`--------------------------'  `--------------------------'
 
   ),
-
-  [1] = LAYOUT_split_3x6_3(
+  [_NUMBERS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
+        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                      FR_SLSH,    FR_7,   FR_8,     FR_9, FR_MINS, FR_BSLS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, XXXXXXX,
+        KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,                      FR_ASTR,    FR_4,    FR_5,    FR_6,    FR_M, FR_PERC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      FR_COMM,    FR_1,    FR_2,    FR_3,  FR_DOT,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, _______,  KC_SPC,     KC_ENT,   MO(3), KC_RALT
-                                      //`--------------------------'  `--------------------------'
+                                          KC_LCTL, KC_TRNS,SPC_LALT,    KC_TRNS,  FR_EQL,    FR_0
+                                    //`--------------------------'    `--------------------------'
+
   ),
-
-  [2] = LAYOUT_split_3x6_3(
+  [_NAVI] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+       KC_ESC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_HOME, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_END,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS,  KC_GRV,
+     TAB_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_PGUP, XXXXXXX, XXXXXXX,   KC_UP, XXXXXXX, XXXXXXX, 
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD,
+      KC_LCTL, KC_PSCR, KC_HOME, KC_PGUP, KC_PGDN,  KC_END,                      KC_PGDN, XXXXXXX, KC_LEFT, KC_DOWN,KC_RIGHT, XXXXXXX, 
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   MO(3),  KC_SPC,     KC_ENT, _______, KC_RALT
+                                          XXXXXXX, XXXXXXX,XXXXXXX,     KC_TRNS, XXXXXXX, XXXXXXX
                                       //`--------------------------'  `--------------------------'
+
   ),
-
-  [3] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, _______,  KC_SPC,     KC_ENT, _______, KC_RALT
-                                      //`--------------------------'  `--------------------------'
-  )
 };
 
 #ifdef OLED_ENABLE

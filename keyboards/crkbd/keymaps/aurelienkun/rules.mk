@@ -1,5 +1,9 @@
-MOUSEKEY_ENABLE = yes    # Mouse keys
-RGBLIGHT_ENABLE = yes    # Enable WS2812 RGB underlight.
-OLED_ENABLE     = yes
-OLED_DRIVER     = SSD1306
-LTO_ENABLE      = yes
+MOUSEKEY_ENABLE 	= no			# Mouse keys disabled for this layout
+OLED_ENABLE				= yes
+OLED_DRIVER   	  = SSD1306
+LTO_ENABLE      	= yes			# Optimization for smaller firmware footprint
+VIA_ENABLE				= yes			# Enable VIA for graphical modifications
+COMBO_ENABLE			= yes			# Enable combo
+RGBLIGHT_ENABLE		= no
+RGB_MATRIX_ENABLE	= yes			# Better RGB effects
+BOOTLOADER 				= atmel-dfu
