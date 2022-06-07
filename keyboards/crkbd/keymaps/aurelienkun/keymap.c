@@ -157,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       KC_TRNS,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                      FR_SLSH,    FR_7,    FR_8,    FR_9, FR_MINS, FR_BSLS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_TRNS,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,                      FR_ASTR,    FR_4,    FR_5,    FR_6,    FR_M, FR_PERC,
+      KC_TRNS,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,                      FR_ASTR,    FR_4,    FR_5,    FR_6, FR_PLUS, FR_PERC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_TRNS,  KC_F11,  KC_F12, KC_VOLD, KC_VOLU, KC_MUTE,                      FR_COMM,    FR_1,    FR_2,    FR_3,  FR_DOT,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -167,11 +167,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [_NAVI] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_TRNS, XXXXXXX, XXXXXXX,  BL_INC, RGB_VAI, KC_VOLU,                      KC_PSCR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_SLEP,
+      KC_TRNS, RGB_HUD, RGB_HUI,  BL_DEC,  BL_INC, BL_TOGG,                      KC_PSCR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_SLEP,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_TRNS, XXXXXXX, XXXXXXX,  BL_DEC, RGB_VAD, KC_VOLD,                      KC_PGUP, KC_HOME,   KC_UP,  KC_END, XXXXXXX,  KC_PWR,
+      KC_TRNS, RGB_SPD, RGB_SPI, RGB_VAD, RGB_VAI, RGB_TOG,                      KC_PGUP, KC_HOME,   KC_UP,  KC_END, XXXXXXX,  KC_PWR,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_TRNS, KC_PSCR, KC_HOME, BL_TOGG, RGB_TOG, KC_MUTE,                      KC_PGDN, KC_LEFT, KC_DOWN,KC_RIGHT, XXXXXXX, XXXXXXX,
+      KC_TRNS, KC_PSCR, KC_HOME, KC_VOLD, KC_VOLU, KC_MUTE,                      KC_PGDN, KC_LEFT, KC_DOWN,KC_RIGHT, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_TRNS, KC_TRNS,KC_TRNS,     KC_TRNS, XXXXXXX, XXXXXXX
                                       //`--------------------------'  `--------------------------'
