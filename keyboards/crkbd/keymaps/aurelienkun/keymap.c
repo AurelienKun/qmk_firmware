@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 #include <keymap_french.h>
 #include <keymap_bepo.h>
+#include <aurelienkun.h>
 
 #define SPC_LALT LALT_T(KC_SPC)       // Tap: space   Hold: alt
 #define TAB_LSFT SFT_T(KC_TAB)        // Tap: tab     Hold: shift
@@ -31,6 +32,7 @@ enum custom_layers {
     _NAVI,
 };
 
+#ifdef COMBO_ENABLE
 enum combos { 
   R_T_LPRN,
   Y_U_RPRN,
@@ -53,6 +55,9 @@ enum combos {
   E_SCLN_EGRV,
   A_SCLN_AGRV,
   U_SCLN_UGRV,
+  C_COMM_CCED,
+  W_F_I_WIFI,
+  P_A_S_PASS,
 };
 
 const uint16_t PROGMEM r_t_lprn[] = { FR_R, FR_T, COMBO_END};
@@ -76,6 +81,9 @@ const uint16_t PROGMEM e_comm_eacu[] = { FR_E, FR_COMM, COMBO_END};
 const uint16_t PROGMEM e_scln_egrv[] = { FR_E, FR_SCLN, COMBO_END};
 const uint16_t PROGMEM u_scln_ugrv[] = { FR_U, FR_SCLN, COMBO_END};
 const uint16_t PROGMEM a_scln_agrv[] = { FR_A, FR_SCLN, COMBO_END};
+const uint16_t PROGMEM c_comm_cced[] = { FR_C, FR_COMM, COMBO_END};
+const uint16_t PROGMEM w_f_i_wifi[] = { FR_W, FR_F, FR_I, COMBO_END};
+const uint16_t PROGMEM p_a_s_pass[] = { FR_P, FR_A, FR_S, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
     [R_T_LPRN]    = COMBO(r_t_lprn, FR_LPRN),    // (
@@ -99,7 +107,38 @@ combo_t key_combos[COMBO_COUNT] = {
     [E_SCLN_EGRV] = COMBO(e_scln_egrv, FR_EGRV), // è
     [A_SCLN_AGRV] = COMBO(a_scln_agrv, FR_AGRV), // à
     [U_SCLN_UGRV] = COMBO(u_scln_ugrv, FR_UGRV), // ù
+    [C_COMM_CCED] = COMBO(c_comm_cced, FR_CCED), // ç
+    [W_F_I_WIFI]  = COMBO_ACTION(w_f_i_wifi),    // wifi
+    [P_A_S_PASS]  = COMBO_ACTION(p_a_s_pass),    // pass
 };
+
+void process_combo_event(uint16_t combo_index, bool pressed) {
+  switch(combo_index) {
+    case W_F_I_WIFI:
+      if (pressed) {
+        SEND_STRING(WIFI_PASS);
+      }
+      break;
+    case P_A_S_PASS:
+      if (pressed) {
+        SEND_STRING(LOGIN_PASS);
+      }
+      break;
+  }
+}
+#endif // COMBO_ENABLE
+
+#ifdef TAP_DANCE_ENABLE
+enum {
+    TD_QT_DQT,
+};
+
+// Tap Dance definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+    // Tap once for Escape, twice for Caps Lock
+    [TD_QT_DQT] = ACTION_TAP_DANCE_DOUBLE(FR_QUOT, FR_DQUO),
+};
+#endif // TAP_DANCE_ENABLE
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_AZERTY] = LAYOUT_split_3x6_3(
@@ -108,37 +147,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
      TAB_LSFT,    FR_Q,    FR_S,    FR_D,    FR_F,    FR_G,                         FR_H,    FR_J,    FR_K,    FR_L,   FR_M,  FR_CIRC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,    FR_W,    FR_X,    FR_C,    FR_V,    FR_B,                         FR_N, FR_COMM, FR_SCLN, FR_COLN, FR_EXLM, FR_QUOT,
+      KC_LCTL,    FR_W,    FR_X,    FR_C,    FR_V,    FR_B,                         FR_N, FR_COMM, FR_SCLN, FR_COLN, FR_EXLM,TD(TD_QT_DQT),
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   TT(1),  KC_SPC,    ENT_NAV, TO(1), KC_RALT
+                                          KC_LGUI,   MO(1),SPC_LALT,    ENT_NAV, TO(1), KC_RALT
                                       //`--------------------------'  `--------------------------'
 
   ),
   [_NUMBERS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                      FR_SLSH,    FR_7,   FR_8,     FR_9, FR_MINS, FR_BSLS,
+      KC_TRNS,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                      FR_SLSH,    FR_7,    FR_8,    FR_9, FR_MINS, FR_BSLS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,                      FR_ASTR,    FR_4,    FR_5,    FR_6,    FR_M, FR_PERC,
+      KC_TRNS,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,                      FR_ASTR,    FR_4,    FR_5,    FR_6,    FR_M, FR_PERC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      FR_COMM,    FR_1,    FR_2,    FR_3,  FR_DOT,  KC_DEL,
+      KC_TRNS,  KC_F11,  KC_F12, KC_VOLD, KC_VOLU, KC_MUTE,                      FR_COMM,    FR_1,    FR_2,    FR_3,  FR_DOT,  KC_DEL,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LCTL, KC_TRNS,SPC_LALT,    KC_TRNS,  FR_EQL,    FR_0
-                                    //`--------------------------'    `--------------------------'
+                                          KC_TRNS, KC_TRNS,KC_TRNS,    KC_TRNS,  FR_EQL,    FR_0
+                                      //`--------------------------'  `--------------------------'
 
   ),
   [_NAVI] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_ESC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_HOME, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_END,
+      KC_TRNS, XXXXXXX, XXXXXXX,  BL_INC, RGB_VAI, KC_VOLU,                      KC_PSCR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_SLEP,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     TAB_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_PGUP, XXXXXXX, XXXXXXX,   KC_UP, XXXXXXX, XXXXXXX, 
+      KC_TRNS, XXXXXXX, XXXXXXX,  BL_DEC, RGB_VAD, KC_VOLD,                      KC_PGUP, KC_HOME,   KC_UP,  KC_END, XXXXXXX,  KC_PWR,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, KC_PSCR, KC_HOME, KC_PGUP, KC_PGDN,  KC_END,                      KC_PGDN, XXXXXXX, KC_LEFT, KC_DOWN,KC_RIGHT, XXXXXXX, 
+      KC_TRNS, KC_PSCR, KC_HOME, BL_TOGG, RGB_TOG, KC_MUTE,                      KC_PGDN, KC_LEFT, KC_DOWN,KC_RIGHT, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, XXXXXXX,XXXXXXX,     KC_TRNS, XXXXXXX, XXXXXXX
+                                          KC_TRNS, KC_TRNS,KC_TRNS,     KC_TRNS, XXXXXXX, XXXXXXX
                                       //`--------------------------'  `--------------------------'
 
   ),
 };
+
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
